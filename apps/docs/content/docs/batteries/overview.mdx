@@ -1,0 +1,156 @@
+---
+title: Batteries Overview
+description: Built-in services for cache, storage, email, background jobs, cron, and AI.
+---
+
+## Overview
+
+Grit comes with "batteries included": production-ready services that are scaffolded with every project. All services follow a graceful degradation pattern: if the backing service (Redis, MinIO, etc.) is unavailable, the app logs a warning but continues running.
+
+## Redis Cache
+
+**Files:** internal/cache/, internal/middleware/cache.go
+
+A Redis-based caching service with HTTP middleware:
+
+```go
+// Cache a value
+cache.Set(ctx, "key", value, 5*time.Minute)
+
+// Get a cached value
+val, err := cache.Get(ctx, "key")
+
+// Delete a cached value
+cache.Delete(ctx, "key")
+```
+
+The cache middleware automatically caches GET responses:
+
+```go
+r.GET("/api/posts", middleware.Cache(cacheService, 5*time.Minute), handler.GetPosts)
+```
+
+## S3 File Storage
+
+**Files:** internal/storage/, internal/handlers/upload_handler.go
+
+S3-compatible file storage with image processing:
+
+- Upload files to MinIO (dev) or S3/R2/B2 (production)
+- Automatic image resizing with configurable dimensions
+- Secure pre-signed URLs for downloads
+- Admin file browser at /system/files
+
+Upload endpoint: POST /api/uploads (multipart form data)
+
+## Email
+
+**Files:** internal/mail/
+
+MAIL_MAILER picks the driver: smtp, resend, mailgun, postmark, sendgrid, ses, log or failover. Left empty, a real RESEND_API_KEY means Resend, and development sends to Mailhog (docker compose) and falls back to the log.
+
+Built-in templates: welcome, password-reset, email-verification, notification.
+
+```go
+// Send now
+err := mailer.SendMessage(ctx, &mail.Message{
+    To:      []string{"user@example.com"},
+    Subject: "Welcome!",
+    HTML:    "<p>Hello</p>",
+    Text:    "Hello",
+})
+
+// Or queue it: the worker sends it and retries on failure.
+// Attachments over 256 KB are refused; store the file and send a link.
+err = mail.Queue(ctx, jobsClient, &mail.Message{To: []string{"user@example.com"}, Subject: "Report", HTML: "<p>Ready</p>"})
+```
+
+Write your own email with `grit generate mail OrderShipped`: a typed data struct, a body inside the shared layout, a text part, and SendOrderShipped / QueueOrderShipped helpers in internal/mail/templates.
+
+Tests use internal/mail/mailtest: `fake := mailtest.New()`, `fake.Mailer()`, `fake.AssertSent(t, to, subject)`.
+
+Preview every registered template at /system/mail in the admin panel.
+
+## Background Jobs (asynq)
+
+**Files:** internal/jobs/
+
+Redis-based background job processing:
+
+- **Email jobs**: Send emails asynchronously
+- **Image jobs**: Process uploaded images
+- **Cleanup jobs**: Remove expired data
+
+```go
+// Enqueue a templated email job
+jobsClient.EnqueueSendEmail(ctx, "user@example.com", "Welcome", "welcome", data)
+```
+
+Monitor jobs at /system/jobs in the admin panel.
+
+## Cron Scheduler
+
+**Files:** internal/cron/
+
+Scheduled task execution built on asynq:
+
+- Define cron tasks with standard cron expressions
+- View scheduled tasks at /system/cron in the admin panel
+
+## AI Integration
+
+**Files:** internal/ai/
+
+Dual AI provider support:
+
+- **Claude** (Anthropic): via the Anthropic API
+- **OpenAI**: via the OpenAI API
+
+Features:
+- Text generation with streaming support
+- Configurable via environment variables
+- Admin handler for AI operations
+
+```bash
+# .env configuration (Vercel AI Gateway)
+AI_GATEWAY_API_KEY=your-key        # One key for all models
+AI_GATEWAY_MODEL=anthropic/claude-sonnet-5.5  # provider/model format
+```
+
+## Configuration
+
+All batteries are configured via environment variables in .env:
+
+```bash
+# Redis: built from REDIS_PORT unless REDIS_URL is set
+REDIS_PORT=6380
+# REDIS_URL=redis://localhost:6380
+
+# S3 Storage (MinIO locally, built from MINIO_PORT unless MINIO_ENDPOINT is set)
+S3_ENDPOINT=
+S3_ACCESS_KEY=your-access-key
+S3_SECRET_KEY=your-secret-key
+S3_BUCKET=uploads
+S3_REGION=us-east-1
+
+# Email: smtp, resend, mailgun, postmark, sendgrid, ses, log or failover
+MAIL_MAILER=smtp
+MAIL_FROM=noreply@example.com
+SMTP_HOST=localhost
+SMTP_PORT=1025
+
+# AI (Vercel AI Gateway: one key, hundreds of models)
+AI_GATEWAY_API_KEY=your-key
+AI_GATEWAY_MODEL=anthropic/claude-sonnet-5.5
+```
+
+## Docker Services
+
+All backing services are included in docker-compose.yml:
+
+| Service | Port | Purpose |
+|---------|------|---------|
+| PostgreSQL | 5432 | Database |
+| Redis | 6379 | Cache + Queue |
+| MinIO | 9000/9001 | File storage |
+| Mailhog | 8025 | Email testing |

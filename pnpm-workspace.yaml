@@ -1,0 +1,28 @@
+# Next under webpack resolves @swc/helpers from its own compiled chunks, and
+# pnpm's isolated layout does not put it anywhere it can reach. .npmrc says the
+# same thing for projects with no workspace file; pnpm 10 reads it from here
+# when there is one, and ignores the .npmrc.
+nodeLinker: hoisted
+
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "apps/desktop/frontend"
+
+allowBuilds:
+  esbuild: true
+
+# pnpm 10 spelling of the same setting.
+onlyBuiltDependencies:
+  - esbuild
+
+# Expo's bundler: see pnpmExpoAudit in Grit's scaffold for the reasoning.
+overrides:
+  "@expo/metro-config>postcss": "^8.5.28"
+
+auditConfig:
+  ignoreGhsas:
+    # image-size 1.x in metro: denial of service parsing ICNS, JXL and HEIF.
+    # Only the project's own image assets are read, at bundle time.
+    - GHSA-w3rx-r6r6-pgpr
+    - GHSA-5p2g-fcmc-qvqq

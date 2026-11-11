@@ -1,0 +1,47 @@
+---
+title: Introduction
+description: Welcome to the gritpos documentation. Learn how to build full-stack applications with Go and React.
+---
+
+## About this project
+
+gritpos is a full-stack application built with [Grit](https://gritframework.dev): **Go** (Gin + GORM) on the API side, **Next.js** (React + TypeScript) on the front, in one monorepo.
+
+These pages document what the project ships with and how to work on it. Replace them with your own as the project grows: they live in `apps/docs/content/docs` as MDX.
+
+## Features
+
+- **JWT Authentication**: Register, login, refresh tokens, role-based access
+- **Admin Panel**: Full auth (login, sign-up, forgot-password), resource CRUD with DataTable, FormBuilder, ViewModal, toast notifications
+- **Code Generator**: `grit generate resource` creates Go model, handler, service, Zod schemas, TypeScript types, React hooks, and admin page
+- **Landing Page**: SaaS marketing page with Framer Motion animations
+- **GORM Studio**: Visual database browser at `/studio`
+- **Batteries Included**: Redis cache, S3 storage, email (Resend), background jobs (asynq), cron scheduler, AI integration (Claude + OpenAI)
+- **Shared Types**: Zod schemas + TypeScript types shared between apps
+- **Docker Ready**: Dev and production Docker Compose setups
+- **Upgrade Command**: `grit upgrade` updates existing projects to the latest scaffold templates
+- **Self-Update**: `grit update` updates the CLI itself to the latest release
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Go + Gin + GORM |
+| Frontend | Next.js (App Router) + React |
+| Styling | Tailwind CSS + shadcn/ui |
+| Database | PostgreSQL |
+| Cache | Redis |
+| Queue | asynq (Redis-based) |
+| Storage | S3-compatible (MinIO, R2, B2) |
+| Email | Resend |
+| Validation | Zod |
+| Data Fetching | React Query (TanStack Query) |
+| Monorepo | Turborepo + pnpm |
+
+## Next Steps
+
+- [Getting Started](/docs/getting-started): Install Grit and create your first project
+- [CLI Commands](/docs/cli/commands): All available CLI commands
+- [Admin Panel](/docs/admin/overview): Dashboard, auth, and resource management
+- [Authentication](/docs/api/authentication): How the JWT auth system works
+- [Batteries](/docs/batteries/overview): Cache, storage, email, jobs, cron, and AI
