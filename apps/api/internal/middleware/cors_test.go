@@ -17,7 +17,10 @@ func TestCORSAllowsWailsDevPreflight(t *testing.T) {
 		origin string
 		want   string
 	}{
+		{origin: "wails://wails.localhost:34115", want: "wails://wails.localhost:34115"},
 		{origin: "http://localhost:34115", want: "http://localhost:34115"},
+		{origin: "http://wails.localhost:34115", want: "http://wails.localhost:34115"},
+		{origin: "wails://other.localhost:34115", want: ""},
 		{origin: "http://localhost:34116", want: ""},
 	} {
 		req := httptest.NewRequest(http.MethodOptions, "/api/v1/auth/login", nil)
@@ -32,6 +35,12 @@ func TestCORSAllowsWailsDevPreflight(t *testing.T) {
 		}
 		if got := rec.Header().Get("Access-Control-Allow-Origin"); got != tt.want {
 			t.Errorf("OPTIONS from %q allowed origin %q, want %q", tt.origin, got, tt.want)
+		}
+		if got := rec.Header().Get("Access-Control-Allow-Methods"); got == "" {
+			t.Errorf("OPTIONS from %q did not include allowed methods", tt.origin)
+		}
+		if got := rec.Header().Get("Access-Control-Allow-Headers"); got == "" {
+			t.Errorf("OPTIONS from %q did not include allowed headers", tt.origin)
 		}
 	}
 }
