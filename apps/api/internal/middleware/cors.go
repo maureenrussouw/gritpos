@@ -74,13 +74,14 @@ func isWailsOrigin(origin string) bool {
 // X-CSRF-Token and Idempotency-Key are injected by the web and admin axios
 // clients on every unsafe method; without them a request either fails the
 // AutoCSRF check or replays with no idempotency guarantee. Authorization stays
-// for native bearer clients. X-API-Key is how a storefront calls the public
-// endpoints cross-origin.
+// for native bearer clients. X-Grit-Client identifies native clients, and
+// X-API-Key is how a storefront calls the public endpoints cross-origin.
 var allowedRequestHeaders = []string{
 	"Origin",
 	"Content-Type",
 	"Accept",
 	"Authorization",
+	"X-Grit-Client",
 	"X-API-Key",
 	"X-CSRF-Token",
 	"Idempotency-Key",

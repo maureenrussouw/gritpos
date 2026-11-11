@@ -367,9 +367,9 @@ func Load() (*Config, error) {
 		Mail:         loadMailConfig(),
 
 		// The Wails desktop webview is allowed by middleware.isWailsOrigin (it
-		// matches the wails.localhost host on any port), so it needs no entry
-		// here — its dev origin includes a configurable port.
-		CORSOrigins: strings.Split(getEnv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001"), ","),
+		// matches the wails.localhost host on any port). The desktop's standalone
+		// Vite dev server is a browser origin, so include its fixed port here.
+		CORSOrigins: strings.Split(getEnv("CORS_ORIGINS", "http://localhost:3000,http://localhost:3001,http://localhost:5174"), ","),
 
 		UploadAllowedMIME: splitCSV(getEnv("UPLOAD_ALLOWED_MIME", "")),
 
