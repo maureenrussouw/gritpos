@@ -1,6 +1,7 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
   "name": "gritpos",
+  "build:tags": "webkit2_41",
   "outputfilename": "gritpos",
   "frontend:install": "pnpm install",
   "frontend:build": "pnpm build",

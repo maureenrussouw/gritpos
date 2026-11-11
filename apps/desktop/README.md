@@ -7,7 +7,17 @@ Go API (over HTTP) as the web app, admin panel, and mobile app in this monorepo.
 
 - Go 1.26+ (the go.mod pins the exact patch release)
 - pnpm 8+
-- [Wails CLI](https://wails.io/docs/gettingstarted/installation): `go install github.com/wailsapp/wails/v2/cmd/wails@v2.16.0`
+- [Wails CLI](https://wails.io/docs/gettingstarted/installation): `go install github.com/wailsapp/wails/v2/cmd/wails@v2.17.1`
+- On Linux, GTK 3 and WebKitGTK 4.1 development packages. On Debian/Ubuntu:
+
+  ```bash
+  sudo apt install build-essential pkg-config libgtk-3-dev libwebkit2gtk-4.1-dev
+  ```
+
+  The Wails project config selects the `webkit2_41` build tag so the native
+  build links against WebKitGTK 4.1. On distributions without that package,
+  install the distro-supported WebKitGTK development package and configure
+  the Wails build tag accordingly.
 
 ## Development
 
