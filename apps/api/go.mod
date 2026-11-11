@@ -41,7 +41,7 @@ require (
 	// procurement asks for, and it cannot be hand-rolled safely — assertion
 	// signature verification, audience restriction and clock-skew handling are
 	// exactly the places a DIY implementation becomes an auth bypass.
-	github.com/crewjam/saml v0.5.1
+	github.com/crewjam/saml v0.6.3
 	github.com/disintegration/imaging v1.6.2
 	github.com/gin-gonic/gin v1.11.0
 	github.com/go-pdf/fpdf v1.4.3
@@ -121,7 +121,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.45.0 // indirect
 	github.com/aws/smithy-go v1.27.3 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/beevik/etree v1.6.0 // indirect
+	github.com/beevik/etree v1.8.1 // indirect
 	github.com/bytedance/sonic v1.14.0 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
@@ -145,7 +145,6 @@ require (
 	github.com/go-webauthn/x v0.3.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/goccy/go-yaml v1.18.0 // indirect
-	github.com/golang-jwt/jwt/v4 v4.5.2 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
@@ -163,7 +162,6 @@ require (
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
-	github.com/mattermost/xml-roundtrip-validator v0.1.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-sqlite3 v1.14.22 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -224,7 +222,7 @@ require (
 	// CVE-2026-33487: XML Digital Signature validation could be bypassed. On the
 	// SAML assertion path that is an authentication bypass, and crewjam/saml
 	// v0.5.1 is its newest release and still asks for the vulnerable version.
-	github.com/russellhaering/goxmldsig v1.6.0 // CVE-2026-33487
+	github.com/russellhaering/goxmldsig v1.6.1 // CVE-2026-33487
 	golang.org/x/image v0.45.0 // indirect; GO-2026-5066, -5062, -5032, -5031, -4815, CVE-2026-46603
 	// HTTP/2 again, and reached from the API's own server: GO-2026-6617 is the
 	// HPACK encoder race that go1.26.10 fixes in the standard library's copy,
