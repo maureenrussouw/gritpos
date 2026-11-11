@@ -45,9 +45,10 @@ func reportRefusedOrigin(origin string) {
 // Safe by construction: "wails.localhost" is a virtual host the webview
 // resolves internally, so a page on the public internet cannot be served
 // from it and cannot forge this origin. Every other origin still has to be
-// in the explicit CORS_ORIGINS allowlist.
+// in the explicit CORS_ORIGINS allowlist. Linux Wails dev uses the fixed
+// http://localhost:34115 origin instead.
 func isWailsOrigin(origin string) bool {
-	if origin == "wails://wails" {
+	if origin == "wails://wails" || origin == "http://localhost:34115" {
 		return true
 	}
 	u, err := url.Parse(origin)
